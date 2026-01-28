@@ -122,3 +122,6 @@ gql
 *.sln
 *.sw?
 *.local
+
+# SvelteKit build output
+public/mockServiceWorker.js
