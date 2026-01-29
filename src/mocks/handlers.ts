@@ -29,4 +29,11 @@ export const handlers = [
   http.get('/api/tasks', () => {
     return HttpResponse.json(tasks);
   }),
+  http.get('/api/tasks/:id', ({ params }) => {
+    const task = tasks.find(t => t.id === params.id);
+    if (!task) {
+      return HttpResponse.json({ error: 'Task not found' }, { status: 404 });
+    }
+    return HttpResponse.json(task);
+  }),
 ];
