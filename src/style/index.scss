@@ -1,2 +1,2 @@
-@import './value.scss';
-@import './class.scss';
+@use 'value' as *;
+@use 'class' as *;

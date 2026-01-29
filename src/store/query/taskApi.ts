@@ -11,4 +11,4 @@ export const taskApi = createApi({
   }),
 });
 
-export const { useLazyGetTasksQuery } = taskApi;
+export const { useGetTasksQuery } = taskApi;
