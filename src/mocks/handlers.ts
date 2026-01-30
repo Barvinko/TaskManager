@@ -30,10 +30,18 @@ export const handlers = [
     return HttpResponse.json(tasks);
   }),
   http.get('/api/tasks/:id', ({ params }) => {
-    const task = tasks.find(t => t.id === params.id);
+    const task = tasks.find((t) => t.id === params.id);
     if (!task) {
       return HttpResponse.json({ error: 'Task not found' }, { status: 404 });
     }
     return HttpResponse.json(task);
+  }),
+  http.delete('/api/tasks/:id', ({ params }) => {
+    const index = tasks.findIndex((t) => t.id === params.id);
+    if (index === -1) {
+      return HttpResponse.json({ error: 'Task not found' }, { status: 404 });
+    }
+    tasks.splice(index, 1);
+    return HttpResponse.json({ message: 'Task deleted' });
   }),
 ];
