@@ -1,16 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-import { useGetTasksQuery, useDeleteTaskMutation } from '@/store/query/taskApi';
-import { Button } from 'react-bootstrap';
+import { memo } from 'react';
+import { useGetTasksQuery } from '@/store/query/taskApi';
+import { TaskCard } from './Task/TaskCard';
 import './TaskList.scss';
 
-export const TaskList = () => {
-  const navigate = useNavigate();
+const TaskList = memo(() => {
   const { data, isLoading, isError } = useGetTasksQuery();
-  const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
-
-  const getStatusClass = (status: string) => {
-    return `task-list__status task-list__status--${status}`;
-  };
 
   if (isLoading) {
     return <div className="task-list__loading">Loading tasks...</div>;
@@ -40,40 +34,11 @@ export const TaskList = () => {
       <div className="task-list__grid">
         {data &&
           data.map((task) => (
-            <div key={task.id} className="task-list__card">
-              <div className="task-list__card-header">
-                <h3 className="task-list__title">{task.title}</h3>
-                <span className={getStatusClass(task.status)}>
-                  {task.status}
-                </span>
-              </div>
-
-              <p className="task-list__description">{task.description}</p>
-
-              <div className="task-list__meta">
-                <span className="task-list__date">
-                  {new Date(task.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-
-              <div className="task-list__actions">
-                <Button
-                  onClick={() => navigate(`/task/${task.id}`)}
-                  className="task-list__btn task-list__btn--view"
-                >
-                  View
-                </Button>
-                <Button
-                  onClick={async () => deleteTask(task.id)}
-                  className="task-list__btn task-list__btn--delete"
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? 'Deleting...' : 'Delete'}
-                </Button>
-              </div>
-            </div>
+            <TaskCard key={task.id} task={task} />
           ))}
       </div>
     </div>
   );
-};
+});
+
+TaskList.displayName = 'TaskList';
