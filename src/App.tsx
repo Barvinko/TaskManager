@@ -11,7 +11,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<TaskList />} />
         <Route path="task/:id" element={<TaskDetail />} />
-        <Route path="task/new" element={<TaskForm />} />
+        <Route path="task/new" element={<TaskForm modeEdit={false} />} />
       </Route>
     </Routes>
   );

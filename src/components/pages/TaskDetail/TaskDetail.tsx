@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGetTasksDetailQuery } from '@/store/query/taskApi';
+import { TaskForm } from '../TaskForm/TaskForm';
 import { Button } from 'react-bootstrap';
 import './TaskDetail.scss';
 
@@ -7,12 +9,23 @@ export const TaskDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
+  const [isEditing, setIsEditing] = useState(false);
   const { data: task, error, isLoading } = useGetTasksDetailQuery(id || '');
 
   if (!id) return <div>Task ID is missing</div>;
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading task</div>;
   if (!task) return <div>Task not found</div>;
+
+  if (isEditing) {
+    return (
+      <TaskForm
+        modeEdit={true}
+        taskId={id}
+        onCancel={() => setIsEditing(false)}
+      />
+    );
+  }
 
   return (
     <div className="task-detail">
@@ -23,6 +36,12 @@ export const TaskDetail = () => {
       <p>{task.description}</p>
       <p>Status: {task.status}</p>
       <p>Created at: {new Date(task.createdAt).toLocaleDateString()}</p>
+      <Button
+        onClick={() => setIsEditing(true)}
+        className="task-detail__btn task-detail__btn--edit"
+      >
+        Edit
+      </Button>
     </div>
   );
 };

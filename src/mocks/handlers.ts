@@ -45,7 +45,7 @@ export const handlers = [
     return HttpResponse.json({ message: 'Task deleted' });
   }),
   http.post('/api/tasks', async ({ request }) => {
-    const body = await request.json() as CreateTaskDto;
+    const body = (await request.json()) as CreateTaskDto;
     const newTask: Task = {
       id: (tasks.length + 1).toString(),
       title: body.title,
@@ -55,5 +55,14 @@ export const handlers = [
     };
     tasks.push(newTask);
     return HttpResponse.json(newTask, { status: 201 });
+  }),
+  http.put('/api/tasks/:id', async ({ params, request }) => {
+    const body = (await request.json()) as Partial<CreateTaskDto>;
+    const task = tasks.find((t) => t.id === params.id);
+    if (!task) {
+      return HttpResponse.json({ error: 'Task not found' }, { status: 404 });
+    }
+    Object.assign(task, body);
+    return HttpResponse.json(task);
   }),
 ];

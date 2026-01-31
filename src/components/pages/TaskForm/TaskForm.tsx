@@ -1,4 +1,8 @@
-import { useCreateTaskMutation } from '@/store/query/taskApi';
+import {
+  useCreateTaskMutation,
+  useUpdateTaskMutation,
+  useGetTasksDetailQuery,
+} from '@/store/query/taskApi';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -6,9 +10,23 @@ import { useNavigate } from 'react-router-dom';
 import type { CreateTaskDto } from '@/types';
 import './TaskForm.scss';
 
-export function TaskForm() {
+interface TaskFormProps {
+  modeEdit: boolean;
+  taskId?: string;
+  onCancel?: () => void;
+}
+
+export function TaskForm({
+  modeEdit = false,
+  taskId,
+  onCancel,
+}: TaskFormProps) {
   const navigate = useNavigate();
-  const [createTask, { isLoading }] = useCreateTaskMutation();
+  const [createTask, { isLoading: isCreating }] = useCreateTaskMutation();
+  const [updateTask, { isLoading: isUpdating }] = useUpdateTaskMutation();
+  const { data: task } = useGetTasksDetailQuery(taskId!, {
+    skip: !modeEdit || !taskId,
+  });
 
   const schema = z.object({
     title: z
@@ -30,26 +48,36 @@ export function TaskForm() {
   } = useForm<CreateTaskDto>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: '',
-      description: '',
-      status: 'todo',
+      title: task?.title || '',
+      description: task?.description || '',
+      status: task?.status || 'todo',
     },
   });
 
   const onSubmit = async (data: CreateTaskDto) => {
     try {
-      await createTask(data).unwrap();
+      if (taskId) {
+        await updateTask({ id: taskId, body: data }).unwrap();
+      } else {
+        await createTask(data).unwrap();
+      }
       reset();
-      navigate('/');
+      if (modeEdit && onCancel) {
+        onCancel();
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.error('Failed to create task:', error);
     }
   };
 
+  const isLoading = isCreating || isUpdating;
+
   return (
     <div className="task-form">
       <div className="task-form__header">
-        <h1>Create New Task</h1>
+        <h1>{modeEdit ? 'Edit Task' : 'Create New Task'}</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="task-form__form">
@@ -106,7 +134,7 @@ export function TaskForm() {
           <button
             type="button"
             className="task-form__btn task-form__btn--cancel"
-            onClick={() => navigate('/')} // Navigate back to task list on cancel
+            onClick={modeEdit ? onCancel : () => navigate('/')}
           >
             Cancel
           </button>
@@ -115,7 +143,13 @@ export function TaskForm() {
             className="task-form__btn task-form__btn--submit"
             disabled={isLoading}
           >
-            {isLoading ? 'Creating...' : 'Create Task'}
+            {isLoading
+              ? modeEdit
+                ? 'Updating...'
+                : 'Creating...'
+              : modeEdit
+                ? 'Update Task'
+                : 'Create Task'}
           </button>
         </div>
       </form>

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { Task } from '@/types';
+import type { Task, CreateTaskDto, UpdateTaskDto } from '@/types';
 
 export const taskApi = createApi({
   reducerPath: 'taskApi',
@@ -15,21 +15,33 @@ export const taskApi = createApi({
         if (!id) throw new Error('Task ID is required');
         return `/tasks/${id}`;
       },
+      providesTags: (_result, _error, id) => [{ type: 'Tasks', id }],
     }),
     deleteTask: builder.mutation<{ message: string }, string>({
       query: (id) => ({
         url: `/tasks/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Tasks', { type: 'Tasks', id: 'LIST' }],
     }),
-    createTask: builder.mutation<Task, Partial<Task>>({
+    createTask: builder.mutation<Task, CreateTaskDto>({
       query: (body) => ({
         url: '/tasks',
         method: 'POST',
         body,
       }),
       invalidatesTags: ['Tasks'],
+    }),
+    updateTask: builder.mutation<Task, { id: string; body: UpdateTaskDto }>({
+      query: ({ id, body }) => ({
+        url: `/tasks/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Tasks', id },
+        'Tasks',
+      ],
     }),
   }),
 });
@@ -39,4 +51,5 @@ export const {
   useGetTasksDetailQuery,
   useDeleteTaskMutation,
   useCreateTaskMutation,
+  useUpdateTaskMutation,
 } = taskApi;
