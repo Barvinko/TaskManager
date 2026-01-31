@@ -23,6 +23,14 @@ export const taskApi = createApi({
       }),
       invalidatesTags: ['Tasks'],
     }),
+    createTask: builder.mutation<Task, Partial<Task>>({
+      query: (body) => ({
+        url: '/tasks',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Tasks'],
+    }),
   }),
 });
 
@@ -30,4 +38,5 @@ export const {
   useGetTasksQuery,
   useGetTasksDetailQuery,
   useDeleteTaskMutation,
+  useCreateTaskMutation,
 } = taskApi;

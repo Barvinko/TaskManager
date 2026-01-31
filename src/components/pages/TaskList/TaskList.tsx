@@ -3,7 +3,7 @@ import { useGetTasksQuery } from '@/store/query/taskApi';
 import { TaskCard } from './Task/TaskCard';
 import './TaskList.scss';
 
-const TaskList = memo(() => {
+export const TaskList = memo(() => {
   const { data, isLoading, isError } = useGetTasksQuery();
 
   if (isLoading) {

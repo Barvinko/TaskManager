@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import type { Task } from '@/types';
+import type { Task, CreateTaskDto } from '@/types';
 
 const tasks: Task[] = [
   {
@@ -43,5 +43,17 @@ export const handlers = [
     }
     tasks.splice(index, 1);
     return HttpResponse.json({ message: 'Task deleted' });
+  }),
+  http.post('/api/tasks', async ({ request }) => {
+    const body = await request.json() as CreateTaskDto;
+    const newTask: Task = {
+      id: (tasks.length + 1).toString(),
+      title: body.title,
+      description: body.description,
+      status: body.status,
+      createdAt: new Date().toISOString(),
+    };
+    tasks.push(newTask);
+    return HttpResponse.json(newTask, { status: 201 });
   }),
 ];

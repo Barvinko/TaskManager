@@ -17,6 +17,7 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@reduxjs/toolkit": "^2.11.2",
     "bootstrap": "^5.3.8",
     "eslint-plugin-react": "^7.37.5",
@@ -27,7 +28,8 @@
     "react-hook-form": "^7.71.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
