@@ -27,7 +27,7 @@ export const Layout = () => {
 
       <footer className="app-layout__footer">
         <div className="app-layout__container">
-          <p>© 2024 Task Manager | Built with React + RTK Query</p>
+          <p>© 2026 Task Manager | Built with React + RTK Query</p>
         </div>
       </footer>
     </div>
