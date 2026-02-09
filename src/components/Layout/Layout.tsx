@@ -13,7 +13,10 @@ export const Layout = () => {
             <Link to="/" className="app-layout__link">
               All Tasks
             </Link>
-            <Link to="/task/new" className="app-layout__link app-layout__link--primary">
+            <Link
+              to="/task/new"
+              className="app-layout__link app-layout__link--primary"
+            >
               + New Task
             </Link>
           </nav>

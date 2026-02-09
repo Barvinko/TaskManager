@@ -32,10 +32,7 @@ export const TaskList = memo(() => {
         <h1>My Tasks</h1>
       </div>
       <div className="task-list__grid">
-        {data &&
-          data.map((task) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
+        {data && data.map((task) => <TaskCard key={task.id} task={task} />)}
       </div>
     </div>
   );

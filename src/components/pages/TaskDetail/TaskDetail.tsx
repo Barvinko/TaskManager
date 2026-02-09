@@ -13,12 +13,18 @@ export const TaskDetail = () => {
   const { data: task, isError, isLoading } = useGetTasksDetailQuery(id || '');
 
   if (!id) return <div>Task ID is missing</div>;
-  if (isLoading) return <div className="task-detail__loading">Loading task...</div>;
+  if (isLoading)
+    return <div className="task-detail__loading">Loading task...</div>;
   if (isError || !task) {
     return (
       <div className="task-detail__error">
         <h2>Task not found</h2>
-        <Button onClick={() => navigate('/')} className="task-detail__back-link">← Back to tasks</Button>
+        <Button
+          onClick={() => navigate('/')}
+          className="task-detail__back-link"
+        >
+          ← Back to tasks
+        </Button>
       </div>
     );
   }
@@ -36,7 +42,10 @@ export const TaskDetail = () => {
   return (
     <div className="task-detail">
       <div className="task-detail__header">
-        <Button onClick={() => navigate('/')} className="task-detail__back-btn task-detail__back-link">
+        <Button
+          onClick={() => navigate('/')}
+          className="task-detail__back-btn task-detail__back-link"
+        >
           Back to Tasks
         </Button>
         <div className="task-detail__actions">
@@ -51,7 +60,9 @@ export const TaskDetail = () => {
       <div className="task-detail__content">
         <div className="task-detail__title-row">
           <h1 className="task-detail__title">{task.title}</h1>
-          <span className={`task-detail__status task-detail__status--${task.status}`}>
+          <span
+            className={`task-detail__status task-detail__status--${task.status}`}
+          >
             {task.status}
           </span>
         </div>
@@ -63,7 +74,8 @@ export const TaskDetail = () => {
 
         <div className="task-detail__meta">
           <div className="task-detail__meta-item">
-            <strong>Created:</strong> {new Date(task.createdAt).toLocaleString()}
+            <strong>Created:</strong>{' '}
+            {new Date(task.createdAt).toLocaleString()}
           </div>
           <div className="task-detail__meta-item">
             <strong>ID:</strong> {task.id}

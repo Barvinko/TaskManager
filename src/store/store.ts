@@ -5,7 +5,7 @@ export const store = configureStore({
   reducer: {
     [taskApi.reducerPath]: taskApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => 
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(taskApi.middleware),
 });
 
