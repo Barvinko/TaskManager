@@ -7,3 +7,8 @@ export const renderWithStore = (
   ui: React.ReactNode,
   testStore = createTestStore()
 ) => render(<Provider store={testStore}>{ui}</Provider>);
+
+export const staticRenderWithStore = () => {
+  const testStore = createTestStore();
+  return (ui: React.ReactNode) => renderWithStore(ui, testStore);
+};

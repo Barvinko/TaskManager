@@ -1,19 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-
-const _empty = () => {};
+import { taskApi } from '@/store/query/taskApi';
 
 export type RootState = {
-  _empty: ReturnType<typeof _empty>;
+  [taskApi.reducerPath]: ReturnType<typeof taskApi.reducer>;
 };
 
-interface CreateTestStoreOptions {
-  _empty?: Partial<ReturnType<typeof _empty>>;
-}
-
-export const createTestStore = (preloadedState?: CreateTestStoreOptions) => {
+export const createTestStore = () => {
   return configureStore({
-    reducer: { _empty },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
-    preloadedState: preloadedState ? preloadedState._empty : undefined,
+    reducer: { [taskApi.reducerPath]: taskApi.reducer },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(taskApi.middleware),
   });
 };

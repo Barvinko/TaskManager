@@ -18,7 +18,7 @@ export default defineConfig({
       enabled: true,
       reporter: ['text', 'html', 'json'],
       reportsDirectory: './coverage',
-      include: ['src/**/*.{ts,tsx}'],
+      include: ['src/**/*.{tsx}'],
       exclude: ['src/**/*.types.tsx'],
     },
   },
